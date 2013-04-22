@@ -14,12 +14,12 @@ This cookbook can be tested using vagrant, but it depends on the following vagra
 
 ```
 $ vagrant plugin install vagrant-omnibus
-$ vagrant plugin install berkshelf-vagrant
+$ vagrant plugin install vagrant-berkshelf
 ```
 
 Tested with 
-* Vagrant (version 1.1.2)
-* berkshelf-vagrant (1.0.6)
+* Vagrant (version 1.2.1)
+* vagrant-berkshelf (1.2.0)
 * vagrant-omnibus (1.0.2)
 
 # Author
