@@ -15,10 +15,11 @@
 # limitations under the License.
 #
 # defaults
+default[:site_www][:user] = "vagrant"
 default[:site_www][:app_name] = "www"
 default[:site_www][:vhostdomain] = "sddevops.org"
 default[:site_www][:migrate] = false
 default[:site_www][:migrate_command] = ""
 default[:site_www][:action] = "deploy"
-default[:site_www][:repo] = "git+ssh://git@github.com/sddevops/www.sddevops.org.git"
-default[:site_www][:branch] = "master"
+default[:site_www][:repo] = "git://github.com/sddevops/www.sddevops.org.git"
+default[:site_www][:revision] = "master"
