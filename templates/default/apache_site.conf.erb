@@ -1,4 +1,44 @@
 NameVirtualHost *:80
 <VirtualHost *:80>
+    ServerAdmin <%= node[:apache][:contact] %>
+    ServerName <%= @params[:server_name] %>
 
+    #ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+
+    DocumentRoot <%= @params[:docroot] %>
+    ErrorDocument 404 /error/index.html
+    # Avoid caching in Chrome/IE
+    # http://httpd.apache.org/docs/current/mod/core.html#fileetag
+    FileETag None
+    <Location "/javascripts">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </Location>
+
+    # this is to ensure no fstat() calls get made until the document root
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+
+    <LocationMatch "^/+$">
+      Header set Pragma  "no-cache"
+      Header set Expires "Sat, 01 Jan 2000 00:00:00 GMT"
+      Header set Cache-Control "private, no-cache, no-store, must-revalidate"
+    </LocationMatch>
+    <Location "/index.html">
+      Header set Pragma  "no-cache"
+      Header set Expires "Sat, 01 Jan 2000 00:00:00 GMT"
+      Header set Cache-Control "private, no-cache, no-store, must-revalidate"
+    </Location>
+
+    <Directory <%= @params[:docroot] %>>
+       Options FollowSymLinks
+       AllowOverride None
+       Order allow,deny
+       Allow from all
+    </Directory>
+
+    LogLevel warn
+    CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+    ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
 </VirtualHost>
