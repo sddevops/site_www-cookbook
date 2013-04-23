@@ -23,14 +23,14 @@ include_recipe "apache2::mod_setenvif"
 include_recipe "apache2::mod_headers"
 
 directory "/srv/#{node[:site_www][:app_name]}" do
-  owner node[:apache][:user]
+  owner node[:site_www][:user]
   group "users"
   mode "0775"
-  action :create 
+  action :create
 end
 
 directory "/srv/#{node[:site_www][:app_name]}/shared" do
-  owner node[:apache][:user]
+  owner node[:site_www][:user]
   group "users"
   mode "0775"
   action :create
@@ -39,16 +39,18 @@ end
 %w{config log pids system}.each do |dir|
   directory "/srv/#{node[:site_www][:app_name]}/shared/#{dir}" do
     recursive true
-    owner node[:apache][:user]
+    owner node[:site_www][:user]
     group "users"
     mode "0775"
   end
 end
 
+ssh_known_hosts_entry 'github.com'
+
 deploy_revision "/srv/#{node[:site_www][:app_name]}" do
   repo node[:site_www][:repo]
-  revision node[:site_www][:branch]
-  user node[:apache][:user]
+  revision node[:site_www][:revision]
+  user node[:site_www][:user]
   group "users"
   keep_releases 2
   enable_submodules false
@@ -63,12 +65,12 @@ deploy_revision "/srv/#{node[:site_www][:app_name]}" do
 end
 
 
-web_app node[:site_www][:hostname] do
+web_app node[:site_www][:app_name] do
   template "apache_site.conf.erb"
-  server_name node[:site_www][:hostname]
+  server_name node[:site_www][:app_name]
 end
 
 # disable the default ubuntu site "it works"
 apache_site "000-default" do
-    enable false
+  enable false
 end

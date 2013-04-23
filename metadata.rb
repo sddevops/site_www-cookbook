@@ -9,5 +9,6 @@ version          "0.1.0"
 
 supports "ubuntu"
 
-depends  "apache2"
+depends  "apache2", "~> 1.6.2"
 depends  "git", "~> 2.3.0"
+depends  "ssh_known_hosts", "~> 0.7.4"
